@@ -10,7 +10,8 @@ import {
   RatingRepository,
   UserRepository,
 } from '@shared';
-import { moviesDataSet } from '../constants/movies-dataset';
+import { join } from 'path';
+import * as fs from 'fs';
 
 @Injectable()
 export class MovieService {
@@ -27,14 +28,16 @@ export class MovieService {
         {},
         {
           sort: { createdAt: -1 },
-          limit: 5,
           notFoundThrowError: false,
         }
       );
-      if (!categories?.length) throw new Error('Please seeds categories first');
+      if (!categories?.length) return { message: 'Already added some data ' };
+      const filePath = join(process.cwd(), 'movies-dataset.json');
+      const fileData = fs.readFileSync(filePath, 'utf8');
+      const moviesDataSet = JSON.parse(fileData);
 
       const movies = await this.movieRepository.countDocuments({});
-      if (movies > 1) throw new Error('Already Movies Added');
+      if (movies > 1) return { message: 'Already added some data ' };
       const moviesList = moviesDataSet?.map((movie) => {
         const categoryId = categories.find(({ _id, name }) =>
           movie.genres.includes(name)
@@ -55,8 +58,8 @@ export class MovieService {
     }
   }
   async listMovies(payload: MovieListRequestDto) {
-    const { categoryId, search } = payload;
     try {
+      const { categoryId, search } = payload;
       let filterQuery = {
         ...(categoryId && { categoryId }),
       };
@@ -177,7 +180,7 @@ export class MovieService {
   async seedCategories() {
     try {
       const categories = await this.categoryRepository.countDocuments();
-      if (categories > 0) throw new Error('Already added some data');
+      if (categories > 0) return { message: 'Already added some data ' };
 
       const categoriesData = [
         { name: 'Action' },
@@ -192,6 +195,13 @@ export class MovieService {
       return await this.categoryRepository.createMany(categoriesData);
     } catch (error) {
       throw new RpcException(error?.message ? error.message : error);
+    }
+  }
+  async listCategories() {
+    try {
+      return this.categoryRepository.find({}, {}, { sort: { createdAt: -1 } });
+    } catch (error) {
+      throw new RpcException(error);
     }
   }
 

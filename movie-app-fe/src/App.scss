@@ -1,0 +1,23 @@
+@import './common/colors.scss';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+a {
+    text-decoration: none;
+}
+
+body {
+    // background-color: $primary-color;
+}
+
+.app-container {
+    margin: 0px, 40px;
+}
