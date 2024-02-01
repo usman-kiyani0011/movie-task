@@ -1,9 +1,9 @@
 ### Backend
 
-1. Navigate to the backend folder:
+1. Navigate to the movie-app-be folder:
 
    ```bash
-   cd backend
+   cd movie-app-be
    ```
 
 2. Install dependencies:
@@ -29,10 +29,10 @@
 
 ### Frontend
 
-1. Navigate to the frontend folder:
+1. Navigate to the movie-app-fe folder:
 
    ```bash
-   cd frontend
+   cd movie-app-fe
    ```
 
 2. Install dependencies:
