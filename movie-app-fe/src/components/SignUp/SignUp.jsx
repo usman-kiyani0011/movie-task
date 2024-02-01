@@ -11,8 +11,6 @@ const SignUp = () => {
   const onFinish = async (values) => {
     try {
       await postApi(`/user/signup`, values);
-      await postApi(`/movies/seed-categories`);
-      postApi(`/movies/seed-movies`);
       navigate("/signin");
     } catch (error) {
       ShowToast(error?.response?.data?.message, "error");
